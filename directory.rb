@@ -17,7 +17,7 @@ def print_header
 end
 
 def print_students(students)
-  students.each { |student| puts "#{student[:name]} (#{student[:cohort]} cohort)" }
+  students.each.with_index(1) { |student , index | puts "#{index} #{student[:name]} (#{student[:cohort]} cohort)" }
 end
 def print_footer(names)
   puts "Overall, we have #{names.count} great students"
