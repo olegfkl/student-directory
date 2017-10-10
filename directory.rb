@@ -4,7 +4,7 @@ def input_students
   puts "To finish, just hit return twice"
   name = gets.chomp
   while !name.empty?
-    students << { name: name , cohort: :november }
+    students << { name: name , cohort: :november, hobby: :tennis , age: 25,  place_of_birth: :UK}
     puts "Now we have #{students.count} students"
     name = gets.chomp
   end
@@ -23,17 +23,17 @@ def print_students(students, letter=nil, length=0)
   elsif length > 0
     students.each do | student |
         if student[:name].length < length
-          length_arr << { name: student[:name] , cohort: :november }
+          length_arr << { name: student[:name] , cohort: :november, hobby: :tennis , age: '25',  place_of_birth: :UK  }
           end
         end
         puts "We found #{length_arr.length} student(s) with criteria less than #{length} characters"
         length_arr.each.with_index(1) do | student , index |
-        puts "#{index} #{student[:name]} (#{student[:cohort]} cohort)"
+        puts "#{index} #{student[:name]} (#{student[:cohort]} cohort, hobby: #{student[:hobby]}, age: #{student[:age]}, Place of birth: #{student[:place_of_birth]})"
       end
   else
      number = 0
      until number == students.length
-     puts "#{number + 1} #{students[number][:name]}   (#{students[number][:cohort]} cohort)"
+     puts "#{number + 1} #{students[number][:name]} (#{students[number][:cohort]} cohort, hobby: #{students[number][:hobby]}, age: #{students[number][:age]}, Place of birth: #{students[number][:place_of_birth]} )"
      number +=1
    end
   end
@@ -41,15 +41,15 @@ end
 
 def sort_by_letter(students, letter , length)
   specific_letter = []
-  students.each do | name |
-    if name[:name].downcase.start_with?(letter)
-       specific_letter << { name: name[:name] , cohort: :november }
+  students.each do | student |
+    if student[:name].downcase.start_with?(letter)
+       specific_letter << { name: student[:name] , cohort: :november, hobby: :tennis , age: '25',  place_of_birth: :UK  }
      end
 end
 if length == 0
   puts "You entered #{specific_letter.count} student(s) starting with your criteria letter \"#{letter}\""
-  specific_letter.each.with_index(1) do | name , index |
-      puts "#{index} #{name[:name]} (#{name[:cohort]} cohort)"
+  specific_letter.each.with_index(1) do | student , index |
+      puts "#{index} #{student[:name]} (#{student[:cohort]} cohort, hobby: #{student[:hobby]}, age: #{student[:age]}, Place of birth: #{student[:place_of_birth]})"
     end
 else
 print_students(specific_letter, letter=nil, length )
