@@ -31,9 +31,11 @@ def print_students(students, letter=nil, length=0)
         puts "#{index} #{student[:name]} (#{student[:cohort]} cohort)"
       end
   else
-    students.each.with_index(1) do | student , index |
-    puts "#{index} #{student[:name]} (#{student[:cohort]} cohort)"
-    end
+     number = 0
+     until number == students.length
+     puts "#{number + 1} #{students[number][:name]}   (#{students[number][:cohort]} cohort)"
+     number +=1
+   end
   end
 end
 
@@ -61,5 +63,5 @@ end
 students = input_students
 #Calling methods
 print_header
-print_students(students , 'a', 6)
+print_students(students)
 print_footer(students)
