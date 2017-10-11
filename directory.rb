@@ -1,4 +1,4 @@
-$width = 60
+$width = 50
 def input_students
   students = []
   puts "Please enter your students' names along with other information about them"
@@ -71,7 +71,21 @@ def sort_by_length(students, length)
     end
 end
 
-
+def sort_by_cohort(students, cohorts)
+  sort = []
+  cohorts.map do | x |
+     students.each do |student|
+       if student[:cohort] == x.capitalize
+        sort << student
+     end
+   end
+ end
+   print "List of students belong to cohort: "
+   puts cohorts.each { |cohort| cohort.capitalize! }.join( ", ")
+   sort.each.with_index(1) do | student , index |
+   puts "#{index} #{student[:name]}".ljust($width/5) + "(#{student[:cohort]} cohort, hobby: #{student[:hobby]}, age: #{student[:age]}, Place of birth: #{student[:place_of_birth]})".ljust($width/5)
+ end
+end
 
 
 def print_footer(names)
@@ -80,5 +94,6 @@ end
 students = input_students
 #Calling methods
 print_header
-print_students(students)
+#print_students(students)
+sort_by_cohort(students, ['october','november'])
 print_footer(students)
