@@ -1,10 +1,11 @@
+$width = 60
 def input_students
   students = []
   puts "Please enter the names of the students"
   puts "To finish, just hit return twice"
   name = gets.chomp
   while !name.empty?
-    students << { name: name , cohort: :november, hobby: :tennis , age: 25,  place_of_birth: :UK}
+    students << { name: name.capitalize , cohort: :november, hobby: :tennis , age: 25,  place_of_birth: :UK}
     puts "Now we have #{students.count} students"
     name = gets.chomp
   end
@@ -12,8 +13,8 @@ def input_students
 end
 
 def print_header
-  puts "The students of Villains Academy"
-  puts "--------------"
+  puts "The students of Villains Academy".center($width)
+  puts "--------------".center($width)
 end
 
 def print_students(students, letter=nil, length=0)
@@ -28,12 +29,12 @@ def print_students(students, letter=nil, length=0)
         end
         puts "We found #{length_arr.length} student(s) with criteria less than #{length} characters"
         length_arr.each.with_index(1) do | student , index |
-        puts "#{index} #{student[:name]} (#{student[:cohort]} cohort, hobby: #{student[:hobby]}, age: #{student[:age]}, Place of birth: #{student[:place_of_birth]})"
+        puts "#{index} #{student[:name]}".ljust($width/3) + "(#{student[:cohort]} cohort, hobby: #{student[:hobby]}, age: #{student[:age]}, Place of birth: #{student[:place_of_birth]})".ljust($width/3)
       end
   else
      number = 0
      until number == students.length
-     puts "#{number + 1} #{students[number][:name]} (#{students[number][:cohort]} cohort, hobby: #{students[number][:hobby]}, age: #{students[number][:age]}, Place of birth: #{students[number][:place_of_birth]} )"
+     puts "#{number + 1} #{students[number][:name]}".ljust($width/3) + "(#{students[number][:cohort]} cohort, hobby: #{students[number][:hobby]}, age: #{students[number][:age]}, Place of birth: #{students[number][:place_of_birth]} )".ljust($width/3)
      number +=1
    end
   end
@@ -49,7 +50,7 @@ end
 if length == 0
   puts "You entered #{specific_letter.count} student(s) starting with your criteria letter \"#{letter}\""
   specific_letter.each.with_index(1) do | student , index |
-      puts "#{index} #{student[:name]} (#{student[:cohort]} cohort, hobby: #{student[:hobby]}, age: #{student[:age]}, Place of birth: #{student[:place_of_birth]})"
+      puts "#{index} #{student[:name]}".ljust($width/3) + " (#{student[:cohort]} cohort, hobby: #{student[:hobby]}, age: #{student[:age]}, Place of birth: #{student[:place_of_birth]})".ljust($width/3)
     end
 else
 print_students(specific_letter, letter=nil, length )
@@ -58,10 +59,10 @@ end
 
 
 def print_footer(names)
-  puts "Overall, we have #{names.count} great students"
+  puts "Overall, we have #{names.count} great students".center($width)
 end
 students = input_students
 #Calling methods
 print_header
-print_students(students)
+print_students(students, 'a')
 print_footer(students)
