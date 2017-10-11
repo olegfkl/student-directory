@@ -1,14 +1,25 @@
 $width = 60
 def input_students
   students = []
-  puts "Please enter the names of the students"
+  puts "Please enter your students' names along with other information about them"
   puts "To finish, just hit return twice"
+  while true
+  print "Student name:\n"
   name = gets.chomp
-  while !name.empty?
-    students << { name: name.capitalize , cohort: :november, hobby: :tennis , age: 25,  place_of_birth: :UK}
-    puts "Now we have #{students.count} students"
-    name = gets.chomp
+  if name.empty?
+      break
   end
+  print "Type \"re\" to re-enter the name again.\n"
+  print "Select student cohort:\n"
+    cohort = gets.chomp
+      if cohort.empty?
+       cohort = "not specified".to_sym
+     elsif cohort == "re"
+       redo
+    end
+  students << { name: name.capitalize , cohort: cohort.capitalize , hobby: :tennis , age: 25,  place_of_birth: :UK}
+  puts "Now we have #{students.count} students"
+    end
   students
 end
 
@@ -23,6 +34,7 @@ def print_students(students, letter=nil, length=0)
   elsif length > 0
     sort_by_length(students, length)
   else
+     number = 0
      until number == students.length
      puts "#{number + 1} #{students[number][:name]}".ljust($width/3) + "(#{students[number][:cohort]} cohort, hobby: #{students[number][:hobby]}, age: #{students[number][:age]}, Place of birth: #{students[number][:place_of_birth]} )".ljust($width/3)
      number +=1
@@ -68,5 +80,5 @@ end
 students = input_students
 #Calling methods
 print_header
-print_students(students, 'a' , 5)
+print_students(students)
 print_footer(students)
