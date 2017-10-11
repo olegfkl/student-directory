@@ -18,21 +18,11 @@ def print_header
 end
 
 def print_students(students, letter=nil, length=0)
-  length_arr = []
   if !letter.nil?
-    sort_by_letter(students, letter, length)
+    sort_by_letter(students, letter , length)
   elsif length > 0
-    students.each do | student |
-        if student[:name].length < length
-          length_arr << { name: student[:name] , cohort: :november, hobby: :tennis , age: '25',  place_of_birth: :UK  }
-          end
-        end
-        puts "We found #{length_arr.length} student(s) with criteria less than #{length} characters"
-        length_arr.each.with_index(1) do | student , index |
-        puts "#{index} #{student[:name]}".ljust($width/3) + "(#{student[:cohort]} cohort, hobby: #{student[:hobby]}, age: #{student[:age]}, Place of birth: #{student[:place_of_birth]})".ljust($width/3)
-      end
+    sort_by_length(students, length)
   else
-     number = 0
      until number == students.length
      puts "#{number + 1} #{students[number][:name]}".ljust($width/3) + "(#{students[number][:cohort]} cohort, hobby: #{students[number][:hobby]}, age: #{students[number][:age]}, Place of birth: #{students[number][:place_of_birth]} )".ljust($width/3)
      number +=1
@@ -45,17 +35,31 @@ def sort_by_letter(students, letter , length)
   students.each do | student |
     if student[:name].downcase.start_with?(letter)
        specific_letter << { name: student[:name] , cohort: :november, hobby: :tennis , age: '25',  place_of_birth: :UK  }
-     end
-end
-if length == 0
-  puts "You entered #{specific_letter.count} student(s) starting with your criteria letter \"#{letter}\""
-  specific_letter.each.with_index(1) do | student , index |
+       end
+    end
+  puts "You entered #{specific_letter.count} student(s) starting with letter \"#{letter}\""
+  if length == 0
+    specific_letter.each.with_index(1) do | student , index |
       puts "#{index} #{student[:name]}".ljust($width/3) + " (#{student[:cohort]} cohort, hobby: #{student[:hobby]}, age: #{student[:age]}, Place of birth: #{student[:place_of_birth]})".ljust($width/3)
     end
-else
-print_students(specific_letter, letter=nil, length )
+  else
+    sort_by_length(specific_letter, length)
+  end
 end
+def sort_by_length(students, length)
+  length_arr = []
+    students.each do | student |
+      if student[:name].length < length
+        length_arr << { name: student[:name] , cohort: :november, hobby: :tennis , age: '25',  place_of_birth: :UK  }
+        end
+      end
+      puts "We found #{length_arr.length} student(s) with criteria less than #{length} characters"
+      length_arr.each.with_index(1) do | student , index |
+      puts "#{index} #{student[:name]}".ljust($width/3) + "(#{student[:cohort]} cohort, hobby: #{student[:hobby]}, age: #{student[:age]}, Place of birth: #{student[:place_of_birth]})".ljust($width/3)
+    end
 end
+
+
 
 
 def print_footer(names)
@@ -64,5 +68,5 @@ end
 students = input_students
 #Calling methods
 print_header
-print_students(students, 'a')
+print_students(students, 'a' , 5)
 print_footer(students)
