@@ -5,7 +5,7 @@ def input_students
   puts "To finish, just hit return twice"
   while true
   print "Student name:\n"
-  name = gets.chomp
+  name = gets.delete("\n")
   if name.empty?
       break
   end
