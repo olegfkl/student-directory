@@ -18,7 +18,11 @@ def input_students
        redo
     end
   students << { name: name.capitalize , cohort: cohort.capitalize , hobby: :tennis , age: 25,  place_of_birth: :UK}
+  if students.count == 1
+  puts "Now we have #{1} student"
+else
   puts "Now we have #{students.count} students"
+end
     end
   students
 end
@@ -36,7 +40,7 @@ def print_students(students, letter=nil, length=0)
   else
      number = 0
      until number == students.length
-     puts "#{number + 1} #{students[number][:name]}".ljust($width/3) + "(#{students[number][:cohort]} cohort, hobby: #{students[number][:hobby]}, age: #{students[number][:age]}, Place of birth: #{students[number][:place_of_birth]} )".ljust($width/3)
+     puts "#{number + 1} #{students[number][:name]}".ljust($width/5) + "(#{students[number][:cohort]} cohort, hobby: #{students[number][:hobby]}, age: #{students[number][:age]}, Place of birth: #{students[number][:place_of_birth]})".ljust($width/5)
      number +=1
    end
   end
@@ -52,7 +56,7 @@ def sort_by_letter(students, letter , length)
   puts "You entered #{specific_letter.count} student(s) starting with letter \"#{letter}\""
   if length == 0
     specific_letter.each.with_index(1) do | student , index |
-      puts "#{index} #{student[:name]}".ljust($width/3) + " (#{student[:cohort]} cohort, hobby: #{student[:hobby]}, age: #{student[:age]}, Place of birth: #{student[:place_of_birth]})".ljust($width/3)
+      puts "#{index} #{student[:name]}".ljust($width/5) + " (#{student[:cohort]} cohort, hobby: #{student[:hobby]}, age: #{student[:age]}, Place of birth: #{student[:place_of_birth]})".ljust($width/5)
     end
   else
     sort_by_length(specific_letter, length)
@@ -67,7 +71,7 @@ def sort_by_length(students, length)
       end
       puts "We found #{length_arr.length} student(s) with criteria less than #{length} characters"
       length_arr.each.with_index(1) do | student , index |
-      puts "#{index} #{student[:name]}".ljust($width/3) + "(#{student[:cohort]} cohort, hobby: #{student[:hobby]}, age: #{student[:age]}, Place of birth: #{student[:place_of_birth]})".ljust($width/3)
+      puts "#{index} #{student[:name]}".ljust($width/5) + "(#{student[:cohort]} cohort, hobby: #{student[:hobby]}, age: #{student[:age]}, Place of birth: #{student[:place_of_birth]})".ljust($width/5)
     end
 end
 
@@ -80,20 +84,30 @@ def sort_by_cohort(students, cohorts)
      end
    end
  end
+ if sort.count == 0
+   puts "Sorry, we didn't find any students by cohort criteria"
+ else
    print "List of students belong to cohort: "
    puts cohorts.each { |cohort| cohort.capitalize! }.join( ", ")
    sort.each.with_index(1) do | student , index |
    puts "#{index} #{student[:name]}".ljust($width/5) + "(#{student[:cohort]} cohort, hobby: #{student[:hobby]}, age: #{student[:age]}, Place of birth: #{student[:place_of_birth]})".ljust($width/5)
+   end
+  end
  end
-end
 
 
 def print_footer(names)
+  if names.count == 0
+    puts "Oops, no students to show".center($width)
+  elsif names.count == 1
+  puts "We have #{1} great student".center($width)
+ else
   puts "Overall, we have #{names.count} great students".center($width)
+ end
 end
 students = input_students
 #Calling methods
 print_header
-#print_students(students)
-sort_by_cohort(students, ['october','november'])
+print_students(students)
+sort_by_cohort(students, ['october','november']) # Edit the array which months you would like to print out
 print_footer(students)
