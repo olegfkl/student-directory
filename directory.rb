@@ -9,8 +9,9 @@ end
 def print_menu
   puts "1. Input the students"
   puts "2. Show the students"
-  puts "3. Show students by specific letter"
-  puts "4. Show students by length of characters"
+  puts "3. Save the list"
+  puts "4. Show students by specific letter"
+  puts "5. Show students by length of characters"
   puts "9. Exit" # 9 because we'll be adding more items
 end
 
@@ -30,6 +31,8 @@ def process(selection)
       sort_by_letter('a')
       print_footer
     when "4"
+      save_students
+    when "5"
       sort_by_length(5)
       print_footer
     when "9"
@@ -65,6 +68,19 @@ def input_students
  end
     end
 end
+
+def save_students
+  # open the file for writing
+  file = File.open("students.csv", "w")
+  # iterate over the array of students
+  @students.each do |student|
+    student_data = [student[:name], student[:cohort]]
+    csv_line = student_data.join(",")
+    file.puts csv_line
+  end
+  file.close
+end
+
 
 def print_header
   puts "The students of Villains Academy".center($width)
