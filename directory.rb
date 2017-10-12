@@ -1,6 +1,39 @@
+require "./list.rb"
+$students = []
+def interactive_menu
+  loop do
+    print_menu
+    process(gets.chomp)
+  end
+end
+
+def print_menu
+  puts "1. Input the students"
+  puts "2. Show the students"
+  puts "9. Exit" # 9 because we'll be adding more items
+end
+
+def show_students
+  print_header
+  print_students($students)
+  print_footer($students)
+end
+
+def process(selection)
+  case selection
+    when "1"
+      input_students
+    when "2"
+      show_students
+    when "9"
+      exit
+    else
+      puts "I don't know what you mean, try again"
+  end
+end
+
 $width = 50
 def input_students
-  students = []
   puts "Please enter your students' names along with other information about them"
   puts "To finish, just hit return twice"
   while true
@@ -17,14 +50,13 @@ def input_students
      elsif cohort == "re"
        redo
     end
-  students << { name: name.capitalize , cohort: cohort.capitalize , hobby: :tennis , age: 25,  place_of_birth: :UK}
-  if students.count == 1
+  $students << { name: name.capitalize , cohort: cohort.capitalize.to_sym , hobby: :tennis , age: 25,  place_of_birth: :UK}
+  if $students.count == 1
   puts "Now we have #{1} student"
-else
-  puts "Now we have #{students.count} students"
-end
+  else
+  puts "Now we have #{$students.count} students"
+ end
     end
-  students
 end
 
 def print_header
@@ -79,7 +111,7 @@ def sort_by_cohort(students, cohorts)
   sort = []
   cohorts.map do | x |
      students.each do |student|
-       if student[:cohort] == x.capitalize
+       if student[:cohort] == x
         sort << student
      end
    end
@@ -88,7 +120,7 @@ def sort_by_cohort(students, cohorts)
    puts "Sorry, we didn't find any students by cohort criteria"
  else
    print "List of students belong to cohort: "
-   puts cohorts.each { |cohort| cohort.capitalize! }.join( ", ")
+   puts cohorts.each { |cohort| cohort}.join( ", ")
    sort.each.with_index(1) do | student , index |
    puts "#{index} #{student[:name]}".ljust($width/5) + "(#{student[:cohort]} cohort, hobby: #{student[:hobby]}, age: #{student[:age]}, Place of birth: #{student[:place_of_birth]})".ljust($width/5)
    end
@@ -105,9 +137,7 @@ def print_footer(names)
   puts "Overall, we have #{names.count} great students".center($width)
  end
 end
-students = input_students
-#Calling methods
-print_header
-print_students(students)
-sort_by_cohort(students, ['october','november']) # Edit the array which months you would like to print out
-print_footer(students)
+
+interactive_menu
+
+#sort_by_cohort(students , [:November]) # Edit the array which months you would like to print out
