@@ -28,12 +28,12 @@ def process(selection)
     when "2"
       show_students
     when "3"
-      sort_by_letter('a')
-      print_footer
-    when "4"
       save_students
+    when "4"
+      sort_by_letter(letter=nil)
+      print_footer
     when "5"
-      sort_by_length(5)
+      sort_by_length(length=0)
       print_footer
     when "9"
       exit
@@ -73,7 +73,7 @@ def save_students
   # open the file for writing
   file = File.open("students.csv", "w")
   # iterate over the array of students
-  @students.each do |student|
+  $students.each do |student|
     student_data = [student[:name], student[:cohort]]
     csv_line = student_data.join(",")
     file.puts csv_line
