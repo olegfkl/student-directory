@@ -7,13 +7,15 @@ def interactive_menu
 end
 
 def print_menu
-  puts "1. Input the students"
-  puts "2. Show the students"
-  puts "3. Save the list to students.csv"
-  puts "4. Load the list from students.csv"
-  puts "5. Show students by specific letter"
-  puts "6. Show students by length of characters"
-  puts "9. Exit" # 9 because we'll be adding more items
+  puts " -------------------------------------------"
+  puts "|  1. Input the students"
+  puts "|  2. Show the students"
+  puts "|  3. Save the list to students.csv"
+  puts "|  4. Load the list from students.csv"
+  puts "|  5. Show students by specific letter"
+  puts "|  6. Show students by length of characters"
+  puts "|  9. Exit"
+  puts " -------------------------------------------"
 end
 
 def show_students
@@ -63,7 +65,7 @@ def input_students
      elsif cohort == "re"
        redo
     end
-  $students << { name: name.capitalize , cohort: cohort.capitalize.to_sym , hobby: :tennis , age: 25,  place_of_birth: :UK}
+  append_to_students(name,cohort)
   if $students.count == 1
   puts " Now we have #{1} student"
   else
@@ -72,6 +74,9 @@ def input_students
     end
 end
 
+def append_to_students(name, cohort)
+  $students << { name: name.capitalize, cohort: cohort.capitalize.to_sym , hobby: :tennis , age: 25,  place_of_birth: :UK}
+end
 def try_load_students
   filename = ARGV.first # first argument from the command line
   return if filename.nil? # get out of the method if it isn't given
@@ -85,12 +90,16 @@ def try_load_students
 end
 
 def load_students(filename = "students.csv")
+  if File.exists?(filename)
   file = File.open(filename, "r")
   file.readlines.each do |line|
   name, cohort = line.chomp.split(',')
-    $students << {name: name, cohort: cohort.to_sym}
+    append_to_students(name , cohort)
   end
   file.close
+else
+  puts "The file doesn't exist, you might want to input and save some students first."
+end
 end
 
 def save_students
