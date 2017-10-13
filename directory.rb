@@ -77,17 +77,20 @@ end
 def append_to_students(name, cohort)
   $students << { name: name.capitalize, cohort: cohort.capitalize.to_sym , hobby: :tennis , age: 25,  place_of_birth: :UK}
 end
+
 def try_load_students
-  filename = ARGV.first # first argument from the command line
-  return if filename.nil? # get out of the method if it isn't given
-  if File.exists?(filename) # if it exists
-    load_students(filename)
-     puts "Loaded #{$students.count} from #{filename}"
-  else # if it doesn't exist
-    puts "Sorry, #{filename} doesn't exist."
-    exit # quit the program
-  end
-end
+   filename = ARGV.first
+   if filename.nil?
+     load_students
+   elsif File.exists?(filename)
+      load_students(filename)
+       puts "Loaded #{$students.count} from #{filename}"
+   else # if it doesn't exist
+       puts "Sorry, #{filename} doesn't exist."
+       exit # quit the program
+     end
+   end
+
 
 def load_students(filename = "students.csv")
   if File.exists?(filename)
@@ -95,10 +98,12 @@ def load_students(filename = "students.csv")
   file.readlines.each do |line|
   name, cohort = line.chomp.split(',')
     append_to_students(name , cohort)
+    puts "------------------------------------------------------------"
+    puts "|  Your students database has been imported from \"students.csv\""
   end
   file.close
 else
-  puts "The file doesn't exist, you might want to input and save some students first."
+  puts "|  Your databse is empty, you might want to input and save some students first."
 end
 end
 
