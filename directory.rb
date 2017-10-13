@@ -2,7 +2,7 @@ $students = []
 def interactive_menu
   loop do
     print_menu
-    process(gets.chomp)
+    process(STDIN.gets.chomp)
   end
 end
 
@@ -51,13 +51,13 @@ def input_students
   puts "To finish, just hit return twice"
   while true
   print "Student name:\n"
-  name = gets.delete("\n")
+  name = STDIN.gets.delete("\n")
   if name.empty?
       break
   end
   print "Type \"re\" to re-enter the name again.\n"
   print "Select student cohort:\n"
-    cohort = gets.chomp
+    cohort = STDIN.gets.chomp
       if cohort.empty?
        cohort = "not specified".to_sym
      elsif cohort == "re"
@@ -72,8 +72,20 @@ def input_students
     end
 end
 
-def load_students
-  file = File.open("students.csv", "r")
+def try_load_students
+  filename = ARGV.first # first argument from the command line
+  return if filename.nil? # get out of the method if it isn't given
+  if File.exists?(filename) # if it exists
+    load_students(filename)
+     puts "Loaded #{$students.count} from #{filename}"
+  else # if it doesn't exist
+    puts "Sorry, #{filename} doesn't exist."
+    exit # quit the program
+  end
+end
+
+def load_students(filename = "students.csv")
+  file = File.open(filename, "r")
   file.readlines.each do |line|
   name, cohort = line.chomp.split(',')
     $students << {name: name, cohort: cohort.to_sym}
@@ -181,7 +193,7 @@ def print_footer
  end
 end
 
-
+try_load_students
 interactive_menu
 
 #sort_by_cohort(students[:November]) # Edit the array which months you would like to print out
