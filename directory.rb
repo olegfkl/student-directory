@@ -1,4 +1,5 @@
 $students = []
+$width = 50
 def interactive_menu
   loop do
     print_menu
@@ -18,12 +19,6 @@ def print_menu
   puts " -------------------------------------------"
 end
 
-def show_students
-  print_header
-  print_students
-  print_footer
-end
-
 def process(selection)
   case selection
     when "1"
@@ -35,7 +30,7 @@ def process(selection)
     when "4"
       load_students
     when "5"
-      sort_by_letter(letter=nil)
+      sort_by_letter
       print_footer
     when "6"
       sort_by_length(length=0)
@@ -43,22 +38,27 @@ def process(selection)
     when "9"
       exit
     else
-      puts "I don't know what you mean, try again"
+      puts "|  I don't know what you mean, try again"
   end
 end
 
-$width = 50
+def show_students
+  print_header
+  print_students
+  print_footer
+end
+
 def input_students
-  puts "Please enter your students' names along with other information about them"
-  puts "To finish, just hit return twice"
+  puts "|  Please enter your students' names along with other information about them"
+  puts "|  To finish, just hit return twice"
   while true
-  print "Student name:\n"
+  print "Student name:\n> "
   name = STDIN.gets.delete("\n")
   if name.empty?
       break
   end
-  print "Type \"re\" to re-enter the name again.\n"
-  print "Select student cohort:\n"
+  print "|  Type \"re\" to re-enter the name again.\n"
+  print "|  Print student cohort:\n> "
     cohort = STDIN.gets.chomp
       if cohort.empty?
        cohort = "not specified".to_sym
@@ -67,9 +67,9 @@ def input_students
     end
   append_to_students(name,cohort)
   if $students.count == 1
-  puts " Now we have #{1} student"
+  puts "|  Now we have #{1} student"
   else
-  puts " Now we have #{$students.count} students"
+  puts "|  Now we have #{$students.count} students"
  end
     end
 end
@@ -84,9 +84,9 @@ def try_load_students
      load_students
    elsif File.exists?(filename)
       load_students(filename)
-       puts "Loaded #{$students.count} from #{filename}"
+       puts "|  Loaded #{$students.count} from #{filename}"
    else # if it doesn't exist
-       puts "Sorry, #{filename} doesn't exist."
+       puts "|  Sorry, #{filename} doesn't exist."
        exit # quit the program
      end
    end
@@ -98,10 +98,10 @@ def load_students(filename = "students.csv")
   file.readlines.each do |line|
   name, cohort = line.chomp.split(',')
     append_to_students(name , cohort)
-    puts "------------------------------------------------------------"
-    puts "|  Your students database has been imported from \"students.csv\""
   end
   file.close
+  puts "------------------------------------------------------------"
+  puts "|  Your students database has been loaded from \"students.csv\""
 else
   puts "|  Your databse is empty, you might want to input and save some students first."
 end
@@ -116,6 +116,7 @@ def save_students
     csv_line = student_data.join(",")
     file.puts csv_line
   end
+  puts "|  Saved!"
   file.close
 end
 
@@ -128,31 +129,44 @@ end
 def print_students
      number = 0
      until number == $students.length
-     puts "#{number + 1}  #{$students[number][:name]}".ljust($width/5) + "(#{$students[number][:cohort]} cohort, hobby: #{$students[number][:hobby]}, age: #{$students[number][:age]}, Place of birth: #{$students[number][:place_of_birth]})".ljust($width/5)
+     puts "--  #{number + 1}    #{$students[number][:name]}".ljust($width/5) + "(#{$students[number][:cohort]} cohort, hobby: #{$students[number][:hobby]}, age: #{$students[number][:age]}, Place of birth: #{$students[number][:place_of_birth]})".ljust($width/5)
      number +=1
    end
   end
 
-def sort_by_letter(letter)
+
+
+def sort_by_letter
   specific_letter = []
-  if letter.nil?
-    puts "   It seems you didn't provide any letters to search by"
-    interactive_menu
-  end
-  $students.each do | student |
+   puts "|  Hit enter to show students in alphabetical order"
+   puts "|  -"
+   puts "|  OR"
+   puts "|  -"
+  print "|  Type the letter you would like to seach by\n> "
+  letter = STDIN.gets.chomp
+  if letter.empty?
+     specific_letter =  $students.sort_by do | student |
+     student[:name]
+   end
+  else
+     $students.each do | student |
        if student[:name].downcase.start_with?(letter)
        specific_letter << { name: student[:name] , cohort: student[:cohort], hobby: :tennis , age: '25',  place_of_birth: :UK  }
        end
     end
+  end
     if specific_letter.length == 1
-      puts "   We found #{specific_letter.count} student starting with letter \"#{letter}\""
+      print "|   We found #{specific_letter.count} student "
     else
-      puts "   We found #{specific_letter.count} students starting with letter \"#{letter}\""
+      print"|   We found #{specific_letter.count} students "
     end
+      print "starting with letter \"#{letter}\"" if !letter.empty?
+      puts ''
       specific_letter.each.with_index(1) do | student , index |
-      puts "#{index}  #{student[:name]}".ljust($width/5) + " (#{student[:cohort]} cohort, hobby: #{student[:hobby]}, age: #{student[:age]}, Place of birth: #{student[:place_of_birth]})".ljust($width/5)
+      puts "--  #{index}    #{student[:name]}".ljust($width/5) + " (#{student[:cohort]} cohort, hobby: #{student[:hobby]}, age: #{student[:age]}, Place of birth: #{student[:place_of_birth]})".ljust($width/5)
     end
 end
+
 def sort_by_length(length)
   length_arr = []
     $students.each do | student |
@@ -161,14 +175,14 @@ def sort_by_length(length)
         end
       end
       if length_arr.length == 0
-      puts "   It seems you didn't enter any number of characters to search by"
+      puts "|   It seems you didn't enter any number of characters to search by"
     elsif length_arr.length == 1
-      puts "   We found #{length_arr.length} student with criteria less than #{length} characters"
+      puts "|   We found #{length_arr.length} student with criteria less than #{length} characters"
       else
-      puts "   We found #{length_arr.length} students with criteria less than #{length} characters"
+      puts "|   We found #{length_arr.length} students with criteria less than #{length} characters"
     end
     length_arr.each.with_index(1) do | student , index |
-    puts "#{index}  #{student[:name]}".ljust($width/5) + "(#{student[:cohort]} cohort, hobby: #{student[:hobby]}, age: #{student[:age]}, Place of birth: #{student[:place_of_birth]})".ljust($width/5)
+    puts "--  #{index}    #{student[:name]}".ljust($width/5) + "(#{student[:cohort]} cohort, hobby: #{student[:hobby]}, age: #{student[:age]}, Place of birth: #{student[:place_of_birth]})".ljust($width/5)
 
   end
 end
@@ -184,12 +198,12 @@ def sort_by_cohort(cohorts)
    end
  end
  if sort.count == 0
-   puts "Sorry, we didn't find any students by cohort criteria"
+   puts "|  Sorry, we didn't find any students by cohort criteria"
  else
-   print "List of students belong to cohort: "
+   print "|  List of students belong to cohort: "
    puts cohorts.each { |cohort| cohort}.join( ", ")
    sort.each.with_index(1) do | student , index |
-   puts "#{index}  #{student[:name]}".ljust($width/5) + "(#{student[:cohort]} cohort, hobby: #{student[:hobby]}, age: #{student[:age]}, Place of birth: #{student[:place_of_birth]})".ljust($width/5)
+   puts "--  #{index}    #{student[:name]}".ljust($width/5) + "(#{student[:cohort]} cohort, hobby: #{student[:hobby]}, age: #{student[:age]}, Place of birth: #{student[:place_of_birth]})".ljust($width/5)
    end
   end
  end
