@@ -11,8 +11,8 @@ def print_menu
   puts " -------------------------------------------"
   puts "|  1. Input the students"
   puts "|  2. Show the students"
-  puts "|  3. Save the list to students.csv"
-  puts "|  4. Load the list from students.csv"
+  puts "|  3. Save the list of students"
+  puts "|  4. Load the list of students"
   puts "|  5. Show students by specific letter"
   puts "|  6. Show students by length of characters"
   puts "|  9. Exit"
@@ -69,10 +69,10 @@ def input_students
     cohort.capitalize!.to_sym
   append_to_students(name,cohort)
   if $students.count == 1
-  puts "|  Now we have #{1} student"
+     puts "|  Now we have #{1} student"
   else
-  puts "|  Now we have #{$students.count} students"
- end
+    puts "|  Now we have #{$students.count} students"
+  end
     end
 end
 
@@ -80,47 +80,44 @@ def append_to_students(name, cohort)
   $students << { name: name, cohort: cohort , hobby: :tennis , age: 25,  place_of_birth: :UK}
 end
 
+
+def read_file_and_append(filename = "students.csv")
+  if File.exists?(filename)
+    file = File.open(filename, "r")
+    file.readlines.each do |line|
+    name, cohort = line.chomp.split(',')
+    append_to_students(name , cohort)
+  end
+    file.close
+    true
+  else
+    false
+  end
+end
+
 def try_load_students
    filename = ARGV.first
    if filename.nil?
-     load_students
-   elsif File.exists?(filename)
-      load_students(filename)
-       puts "|  Loaded #{$students.count} from #{filename}"
+     read_file_and_append
+   elsif read_file_and_append(filename)
+        puts "|  Loaded #{$students.count} students from #{filename}"
    else # if it doesn't exist
        puts "|  Sorry, #{filename} doesn't exist."
        exit # quit the program
-     end
-   end
-
+    end
+end
 
 def load_students(filename = "students.csv")
-  if File.exists?(filename)
-  file = File.open(filename, "r")
-  file.readlines.each do |line|
-  name, cohort = line.chomp.split(',')
-    append_to_students(name , cohort)
-  end
-  file.close
-  puts "------------------------------------------------------------"
-  puts "|  Your students database has been loaded from \"students.csv\""
-else
-  puts "|  Your databse is empty, you might want to input and save some students first."
-end
+   print "|  Provide a file name to load a database from\n > "
+   new_database = STDIN.gets.chomp
+   if read_file_and_append(new_database)
+      puts "|  Loaded!"
+   else
+      puts "|  Sorry, #{new_database} doesn't exist."
+   end
 end
 
-def savety_students
-  # open the file for writing
-  file = File.open("students.csv", "a+")
-  # iterate over the array of students
-  $students.each do |student|
-    student_data = [student[:name], student[:cohort]]
-    csv_line = student_data.join(",")
-    file.puts csv_line
-  end
-  puts "|  Saved!"
-  file.close
-end
+
 
 def save_students
   puts "|  Hit enter to save students to your default database  \"students.csv\""
@@ -138,11 +135,6 @@ def save_students
   puts "|  Saved!"
   file.close
 end
-
-
-
-
-
 
 
 def print_header
