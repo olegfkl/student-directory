@@ -1,5 +1,5 @@
-$students = []
-$width = 50
+@students = []
+@width = 50
 def interactive_menu
   loop do
     print_menu
@@ -68,27 +68,28 @@ def input_students
     name.capitalize!
     cohort.capitalize!.to_sym
   append_to_students(name,cohort)
-  if $students.count == 1
+  if @students.count == 1
      puts "|  Now we have #{1} student"
   else
-    puts "|  Now we have #{$students.count} students"
+    puts "|  Now we have #{@students.count} students"
   end
     end
 end
 
 def append_to_students(name, cohort)
-  $students << { name: name, cohort: cohort , hobby: :tennis , age: 25,  place_of_birth: :UK}
+  @students << { name: name.capitalize, cohort: cohort.to_sym, hobby: :tennis , age: 25,  place_of_birth: :UK}
 end
+
 
 
 def read_file_and_append(filename = "students.csv")
   if File.exists?(filename)
-    file = File.open(filename, "r")
-    file.readlines.each do |line|
-    name, cohort = line.chomp.split(',')
+    File.open(filename , "r") do |file|
+     file.readlines.each do |line|
+      name, cohort = line.chomp.split(',')
     append_to_students(name , cohort)
   end
-    file.close
+end
     true
   else
     false
@@ -100,7 +101,7 @@ def try_load_students
    if filename.nil?
      puts read_file_and_append ? "Default database is loaded" : "Your database is empty, input students or load database"
    elsif read_file_and_append(filename)
-        puts "|  Loaded #{$students.count} students from #{filename}"
+        puts "|  Loaded #{@students.count} students from #{filename}"
    else # if it doesn't exist
        puts "|  Sorry, #{filename} doesn't exist."
        exit # quit the program
@@ -127,7 +128,7 @@ def save_students
  print "|  Provide database file name\n> "
  database = STDIN.gets.chomp
   database.empty? ? file = File.open("students.csv", "a+") : file = File.open(database, "a+")
-  $students.each do |student|
+  @students.each do |student|
     student_data = [student[:name], student[:cohort]]
     csv_line = student_data.join(",")
     file.puts csv_line
@@ -138,14 +139,14 @@ end
 
 
 def print_header
-  puts "The students of Villains Academy".center($width)
-  puts "--------------".center($width)
+  puts "The students of Villains Academy".center(@width)
+  puts "--------------".center(@width)
 end
 
 def print_students
      number = 0
-     until number == $students.length
-     puts "--  #{number + 1}    #{$students[number][:name]}".ljust($width/5) + "(#{$students[number][:cohort]} cohort, hobby: #{$students[number][:hobby]}, age: #{$students[number][:age]}, Place of birth: #{$students[number][:place_of_birth]})".ljust($width/5)
+     until number == @students.length
+     puts "--  #{number + 1}   #{@students[number][:name]}".ljust(@width/5) + "  (#{@students[number][:cohort]} cohort, hobby: #{@students[number][:hobby]}, age: #{@students[number][:age]}, Place of birth: #{@students[number][:place_of_birth]})".ljust(@width/5)
      number +=1
    end
   end
@@ -161,11 +162,11 @@ def sort_by_letter
   print "|  Type the letter you would like to seach by\n> "
   letter = STDIN.gets.chomp
   if letter.empty?
-     specific_letter =  $students.sort_by do | student |
+     specific_letter =  @students.sort_by do | student |
      student[:name]
    end
   else
-     $students.each do | student |
+     @students.each do | student |
        if student[:name].downcase.start_with?(letter)
        specific_letter << { name: student[:name] , cohort: student[:cohort], hobby: :tennis , age: '25',  place_of_birth: :UK  }
        end
@@ -179,13 +180,13 @@ def sort_by_letter
       print "starting with letter \"#{letter}\"" if !letter.empty?
       puts ''
       specific_letter.each.with_index(1) do | student , index |
-      puts "--  #{index}    #{student[:name]}".ljust($width/5) + " (#{student[:cohort]} cohort, hobby: #{student[:hobby]}, age: #{student[:age]}, Place of birth: #{student[:place_of_birth]})".ljust($width/5)
+      puts "--  #{index}   #{student[:name]}".ljust(@width/5) + "  (#{student[:cohort]} cohort, hobby: #{student[:hobby]}, age: #{student[:age]}, Place of birth: #{student[:place_of_birth]})".ljust(@width/5)
     end
 end
 
 def sort_by_length(length)
   length_arr = []
-    $students.each do | student |
+    @students.each do | student |
       if student[:name].length < length
         length_arr << { name: student[:name] , cohort: student[:cohort], hobby: :tennis , age: '25',  place_of_birth: :UK  }
         end
@@ -198,7 +199,7 @@ def sort_by_length(length)
       puts "|   We found #{length_arr.length} students with criteria less than #{length} characters"
     end
     length_arr.each.with_index(1) do | student , index |
-    puts "--  #{index}    #{student[:name]}".ljust($width/5) + "(#{student[:cohort]} cohort, hobby: #{student[:hobby]}, age: #{student[:age]}, Place of birth: #{student[:place_of_birth]})".ljust($width/5)
+    puts "--  #{index}   #{student[:name]}".ljust(@width/5) + "  (#{student[:cohort]} cohort, hobby: #{student[:hobby]}, age: #{student[:age]}, Place of birth: #{student[:place_of_birth]})".ljust(@width/5)
 
   end
 end
@@ -219,21 +220,21 @@ def sort_by_cohort(cohorts)
    print "|  List of students belong to cohort: "
    puts cohorts.each { |cohort| cohort}.join( ", ")
    sort.each.with_index(1) do | student , index |
-   puts "--  #{index}    #{student[:name]}".ljust($width/5) + "(#{student[:cohort]} cohort, hobby: #{student[:hobby]}, age: #{student[:age]}, Place of birth: #{student[:place_of_birth]})".ljust($width/5)
+   puts "--  #{index}    #{student[:name]}".ljust(@width/5) + "(#{student[:cohort]} cohort, hobby: #{student[:hobby]}, age: #{student[:age]}, Place of birth: #{student[:place_of_birth]})".ljust(@width/5)
    end
   end
  end
 
 
 def print_footer
-  if $students.count == 0
-    puts "Oops, no students to show".center($width)
-  elsif $students.count == 1
-  puts "We have #{1} great student".center($width)
+  if @students.count == 0
+    puts "Oops, no students to show".center(@width)
+  elsif @students.count == 1
+  puts "We have #{1} great student".center(@width)
  else
-  puts "---------------------------------".center($width)
-  puts "Overall, we have #{$students.count} great students".center($width)
-  puts "---------------------------------".center($width)
+  puts "---------------------------------".center(@width)
+  puts "Overall, we have #{@students.count} great students".center(@width)
+  puts "---------------------------------".center(@width)
  end
 end
 
