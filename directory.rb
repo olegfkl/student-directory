@@ -62,9 +62,11 @@ def input_students
     cohort = STDIN.gets.chomp
       if cohort.empty?
        cohort = "not specified".to_sym
-     elsif cohort == "re"
+     elsif cohort == "re".downcase
        redo
     end
+    name.capitalize!
+    cohort.capitalize!.to_sym
   append_to_students(name,cohort)
   if $students.count == 1
   puts "|  Now we have #{1} student"
@@ -75,7 +77,7 @@ def input_students
 end
 
 def append_to_students(name, cohort)
-  $students << { name: name.capitalize, cohort: cohort.capitalize.to_sym , hobby: :tennis , age: 25,  place_of_birth: :UK}
+  $students << { name: name, cohort: cohort , hobby: :tennis , age: 25,  place_of_birth: :UK}
 end
 
 def try_load_students
