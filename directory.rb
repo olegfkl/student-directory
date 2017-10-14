@@ -109,7 +109,7 @@ else
 end
 end
 
-def save_students
+def savety_students
   # open the file for writing
   file = File.open("students.csv", "a+")
   # iterate over the array of students
@@ -121,6 +121,28 @@ def save_students
   puts "|  Saved!"
   file.close
 end
+
+def save_students
+  puts "|  Hit enter to save students to your default database  \"students.csv\""
+  puts "|  -"
+  puts "|  OR"
+  puts "|  -"
+ print "|  Provide database file name\n> "
+ database = STDIN.gets.chomp
+  database.empty? ? file = File.open("students.csv", "a+") : file = File.open(database, "a+")
+  $students.each do |student|
+    student_data = [student[:name], student[:cohort]]
+    csv_line = student_data.join(",")
+    file.puts csv_line
+  end
+  puts "|  Saved!"
+  file.close
+end
+
+
+
+
+
 
 
 def print_header
