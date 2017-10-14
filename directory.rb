@@ -98,7 +98,7 @@ end
 def try_load_students
    filename = ARGV.first
    if filename.nil?
-     read_file_and_append
+     puts read_file_and_append ? "Default database is loaded" : "Your database is empty, input students or load database"
    elsif read_file_and_append(filename)
         puts "|  Loaded #{$students.count} students from #{filename}"
    else # if it doesn't exist
