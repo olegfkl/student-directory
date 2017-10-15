@@ -86,7 +86,7 @@ end
 
 
 # Using students.csv without Ruby CSV libary
-
+=begin
 def read_file_and_append(filename = "students.csv")
   if File.exists?(filename)
     File.open(filename , "r") do |file|
@@ -95,6 +95,19 @@ def read_file_and_append(filename = "students.csv")
     append_to_students(name , cohort)
   end
 end
+    true
+  else
+    false
+  end
+end
+=end
+
+def read_file_and_append(filename = "students.csv")
+  if File.exists?(filename)
+    CSV.foreach(filename , "r") do |line|
+      name, cohort = line
+    append_to_students(name , cohort)
+  end
     true
   else
     false
@@ -147,6 +160,7 @@ def save_students
 end
 =end
 
+# Using Ruby CSV libary
 def save_students
   puts "|  Hit enter to save students to your default database  \"students.csv\""
   puts "|  -"
