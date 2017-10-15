@@ -237,24 +237,34 @@ end
 
 def sort_by_length(length)
   length_arr = []
-    @students.each do | student |
-      if student[:name].length < length
+   puts "|  Hit enter to show students by the length of the name"
+   puts "|  -"
+   puts "|  OR"
+   puts "|  -"
+  print "|  Type the number. It will show students whose length less than provided number\n> "
+  length_num = STDIN.gets.chomp
+  if length_num.empty?
+     length_arr  =  @students.sort_by do | student |
+     student[:name].length
+     end
+ else
+      @students.each do | student |
+      if student[:name].length < length_num.to_i
         length_arr << { name: student[:name] , cohort: student[:cohort], hobby: :tennis , age: '25',  place_of_birth: :UK  }
         end
       end
       if length_arr.length == 0
       puts "|   It seems you didn't enter any number of characters to search by"
     elsif length_arr.length == 1
-      puts "|   We found #{length_arr.length} student with criteria less than #{length} characters"
+      puts "|   We found #{length_arr.length} student with criteria less than #{length_num} characters"
       else
-      puts "|   We found #{length_arr.length} students with criteria less than #{length} characters"
+      puts "|   We found #{length_arr.length} students with criteria less than #{length_num} characters"
     end
-    length_arr.each.with_index(1) do | student , index |
-    puts "--  #{index}   #{student[:name]}".ljust(@width/5) + "  (#{student[:cohort]} cohort, hobby: #{student[:hobby]}, age: #{student[:age]}, Place of birth: #{student[:place_of_birth]})".ljust(@width/5)
-
+  end
+  length_arr.each.with_index(1) do | student , index |
+  puts "--  #{index}   #{student[:name]}".ljust(@width/5) + "  (#{student[:cohort]} cohort, hobby: #{student[:hobby]}, age: #{student[:age]}, Place of birth: #{student[:place_of_birth]})".ljust(@width/5)
   end
 end
-
 
 def sort_by_cohort(cohorts)
   sort = []
@@ -302,5 +312,8 @@ interactive_menu
 
 #sort_by_cohort(students[:November]) # Edit the array which months you would like to print out
 =begin
-Rewrite input_students loop
+Improvements:
+Improve input_students loop
+Provide return to the menu when asked for database name for example in option 3 or 4
+More user details
 =end
