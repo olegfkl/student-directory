@@ -1,3 +1,4 @@
+require 'csv'
 @students = []
 @width = 50
 def interactive_menu
@@ -37,7 +38,7 @@ def process(selection)
       sort_by_length(length=0)
       print_footer
     when "7"
-      read_source_code  
+      read_source_code
     when "9"
       exit
     else
@@ -84,6 +85,7 @@ def append_to_students(name, cohort)
 end
 
 
+# Using students.csv without Ruby CSV libary
 
 def read_file_and_append(filename = "students.csv")
   if File.exists?(filename)
@@ -99,6 +101,9 @@ end
   end
 end
 
+
+
+
 def try_load_students
    filename = ARGV.first
    if filename.nil?
@@ -111,6 +116,7 @@ def try_load_students
     end
 end
 
+
 def load_students(filename = "students.csv")
    print "|  Provide a file name to load a database from\n > "
    new_database = STDIN.gets.chomp
@@ -121,8 +127,8 @@ def load_students(filename = "students.csv")
    end
 end
 
-
-
+# Without Ruby CSV libary
+=begin
 def save_students
   puts "|  Hit enter to save students to your default database  \"students.csv\""
   puts "|  -"
@@ -139,6 +145,34 @@ def save_students
   puts "|  Saved!"
   file.close
 end
+=end
+
+def save_students
+  puts "|  Hit enter to save students to your default database  \"students.csv\""
+  puts "|  -"
+  puts "|  OR"
+  puts "|  -"
+ print "|  Provide database file name\n> "
+ database = STDIN.gets.chomp
+  if database.empty?
+    CSV.open("students.csv", "a+") do |csv|
+      @students.each do |student|
+        student_data = [student[:name], student[:cohort]]
+        csv << student_data
+      end
+    end
+  else
+    CSV.open(database, "a+") do |csv|
+  @students.each do |student|
+    student_data = [student[:name], student[:cohort]]
+    csv << student_data
+  end
+end
+end
+  puts "|  Saved!"
+end
+
+
 
 
 def print_header
