@@ -15,6 +15,7 @@ def print_menu
   puts "|  4. Load the list of students"
   puts "|  5. Show students by specific letter"
   puts "|  6. Show students by length of characters"
+  puts "|  7. Read source code of this program"
   puts "|  9. Exit"
   puts " -------------------------------------------"
 end
@@ -35,6 +36,8 @@ def process(selection)
     when "6"
       sort_by_length(length=0)
       print_footer
+    when "7"
+      read_source_code  
     when "9"
       exit
     else
@@ -238,7 +241,18 @@ def print_footer
  end
 end
 
+def read_source_code
+File.open((__FILE__), "r" ) do |file|
+  file.readlines.each do |line|
+    puts line
+  end
+end
+end
+
 try_load_students
 interactive_menu
 
 #sort_by_cohort(students[:November]) # Edit the array which months you would like to print out
+=begin
+Rewrite input_students loop
+=end
