@@ -266,26 +266,6 @@ def sort_by_length(length)
   end
 end
 
-def sort_by_cohort(cohorts)
-  sort = []
-  cohorts.map do | x |
-     students.each do |student|
-       if student[:cohort] == x
-        sort << student
-     end
-   end
- end
- if sort.count == 0
-   puts "|  Sorry, we didn't find any students by cohort criteria"
- else
-   print "|  List of students belong to cohort: "
-   puts cohorts.each { |cohort| cohort}.join( ", ")
-   sort.each.with_index(1) do | student , index |
-   puts "--  #{index}    #{student[:name]}".ljust(@width/5) + "(#{student[:cohort]} cohort, hobby: #{student[:hobby]}, age: #{student[:age]}, Place of birth: #{student[:place_of_birth]})".ljust(@width/5)
-   end
-  end
- end
-
 
 def print_footer
   if @students.count == 0
@@ -310,10 +290,10 @@ end
 try_load_students
 interactive_menu
 
-#sort_by_cohort(students[:November]) # Edit the array which months you would like to print out
 =begin
 Improvements:
 Improve input_students loop
 Provide return to the menu when asked for database name for example in option 3 or 4
 More user details
+Sort by cohort
 =end
