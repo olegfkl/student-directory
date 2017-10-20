@@ -81,7 +81,7 @@ def input_students
 end
 
 def append_to_students(name, cohort)
-  @students << { name: name.capitalize, cohort: cohort.to_sym, hobby: :tennis , age: 25,  place_of_birth: :UK}
+  @students << { name: name.capitalize, cohort: cohort, hobby: :tennis , age: 25,  place_of_birth: :UK}
 end
 
 
